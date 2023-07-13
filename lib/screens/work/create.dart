@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:test/screens/work/index.dart';
+import 'package:test/utils/func.dart';
 
 class WorkCreateScreen extends StatefulWidget {
   const WorkCreateScreen({super.key});
@@ -13,15 +13,17 @@ class WorkCreateScreen extends StatefulWidget {
 
 class _WorkCreateScreenState extends State<WorkCreateScreen> {
   final TextEditingController _textEditingController = TextEditingController();
-  late DateTime selectedDate;
-  late TimeOfDay selectedTime;
-  String selectedOption = 'Option 1';
+
+  String title = '';
+  String summary = '';
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+  String selectedOption = 'Bình thường';
 
   List<String> options = [
-    'Option 1',
-    'Option 2',
-    'Option 3',
-    'Option 4',
+    'Bình thường',
+    'Uu tiên',
+    'Quang trọng',
   ];
 
   @override
@@ -34,8 +36,8 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      firstDate: DateTime(1977),
+      lastDate: DateTime(2200),
     );
 
     if (pickedDate != null && pickedDate != selectedDate) {
@@ -60,13 +62,10 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode) {
-      print('render');
-    }
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
-              title: const Text('Create new work'),
+              title: const Text('Thêm mới một công việc'),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_circle_left),
                 onPressed: () {
@@ -100,15 +99,20 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                           )),
                       Container(
                         margin: const EdgeInsets.only(top: 10),
-                        child: const Material(
+                        child: Material(
                           elevation: 5.0,
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           color: Colors.deepOrange,
                           child: TextField(
-                            decoration: InputDecoration(
+                            onChanged: (value) {
+                              setState(() {
+                                title = value;
+                              });
+                            },
+                            decoration: const InputDecoration(
                                 fillColor: Colors.white, filled: true),
-                            style:
-                                TextStyle(fontSize: 20.0, color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 20.0, color: Colors.black),
                           ),
                         ),
                       ),
@@ -126,16 +130,21 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                       Container(
                         margin: const EdgeInsets.only(top: 10),
                         alignment: Alignment.topLeft,
-                        child: const Material(
+                        child: Material(
                           elevation: 5.0,
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           color: Colors.deepOrange,
                           child: TextField(
+                            onChanged: (value) {
+                              setState(() {
+                                summary = value;
+                              });
+                            },
                             maxLines: 8,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 fillColor: Colors.white, filled: true),
-                            style:
-                                TextStyle(fontSize: 20.0, color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 20.0, color: Colors.black),
                           ),
                         ),
                       ),
@@ -155,19 +164,17 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                         alignment: Alignment.topLeft,
                         child: Row(
                           children: [
-                            const Expanded(
-                              child: Material(
-                                  elevation: 5.0,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                  color: Colors.deepOrange,
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                        fillColor: Colors.white, filled: true),
-                                    style: TextStyle(
-                                        fontSize: 20.0, color: Colors.black),
-                                  )),
-                            ),
+                            Expanded(
+                                child: Material(
+                                    elevation: 5.0,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Text(
+                                          '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+                                          style: const TextStyle(
+                                              fontSize: 20.0,
+                                              color: Colors.black)),
+                                    ))),
                             Container(
                               color: Colors.teal,
                               child: IconButton(
@@ -195,18 +202,17 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                         alignment: Alignment.topLeft,
                         child: Row(
                           children: [
-                            const Expanded(
+                            Expanded(
                               child: Material(
                                   elevation: 5.0,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                  color: Colors.deepOrange,
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                        fillColor: Colors.white, filled: true),
-                                    style: TextStyle(
-                                        fontSize: 20.0, color: Colors.black),
-                                  )),
+                                  child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Text(
+                                        '${formatNumber(selectedTime.hour)} : ${formatNumber(selectedTime.minute)}',
+                                        style: const TextStyle(
+                                            fontSize: 20.0,
+                                            color: Colors.black),
+                                      ))),
                             ),
                             Container(
                               color: Colors.teal,
@@ -214,7 +220,7 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                                   onPressed: () {
                                     _selectTime(context);
                                   },
-                                  icon: const Icon(Icons.calendar_month)),
+                                  icon: const Icon(Icons.alarm)),
                             )
                           ],
                         ),
@@ -231,16 +237,16 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                             textAlign: TextAlign.left,
                           )),
                       Container(
-                        margin: EdgeInsets.only(top: 10),
-                        padding: EdgeInsets.only(left: 10),
+                        margin: const EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(left: 10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(color: Colors.grey, width: 1),
                             borderRadius: BorderRadius.circular(5)),
                         child: DropdownButton<String>(
-                          hint: Text('Chọn độ quan trọng'),
+                          hint: const Text('Chọn độ quan trọng'),
                           dropdownColor: Colors.white,
-                          icon: Icon(Icons.arrow_drop_down),
+                          icon: const Icon(Icons.arrow_drop_down),
                           iconSize: 36,
                           isExpanded: true,
                           underline: const SizedBox(),
@@ -264,36 +270,18 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                       )
                     ]))),
                     Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(children: [
-                          Expanded(
-                              flex: 1,
-                              child: Container(
-                                padding: EdgeInsets.only(right: 10),
-                                child: TextButton(
-                                  onPressed: () {},
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.orangeAccent),
-                                  child: const Text(
-                                    'asd',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              )),
-                          Expanded(
-                              flex: 1,
-                              child: Container(
-                                child: TextButton(
-                                  onPressed: () {},
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.orangeAccent),
-                                  child: const Text(
-                                    'asd',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ))
-                        ]))
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      child: TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                            backgroundColor: Colors.orangeAccent),
+                        child: const Text(
+                          'Lưu',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    )
                   ],
                 ))));
   }
