@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:test/screens/home.dart';
 import 'package:test/screens/work/create.dart';
+import 'package:test/services/works.dart';
 
 class WorksScreen extends StatefulWidget {
   const WorksScreen({super.key});
@@ -13,6 +15,21 @@ class WorksScreen extends StatefulWidget {
 
 class _WorksScreenState extends State<WorksScreen> {
   int _currentIndex = 0;
+
+  final WorkService _workService = WorkService();
+
+  load() async {
+    var result = await _workService.get();
+
+    print(result[0].id);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    load();
+  }
 
   @override
   Widget build(BuildContext context) {

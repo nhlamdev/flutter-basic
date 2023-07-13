@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:test/screens/work/index.dart';
+import 'package:test/services/works.dart';
 import 'package:test/utils/func.dart';
 
 class WorkCreateScreen extends StatefulWidget {
@@ -14,10 +16,11 @@ class WorkCreateScreen extends StatefulWidget {
 class _WorkCreateScreenState extends State<WorkCreateScreen> {
   final TextEditingController _textEditingController = TextEditingController();
 
+  final WorkService _workService = WorkService();
+
   String title = '';
   String summary = '';
   DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay.now();
   String selectedOption = 'Bình thường';
 
   List<String> options = [
@@ -42,7 +45,8 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
 
     if (pickedDate != null && pickedDate != selectedDate) {
       setState(() {
-        selectedDate = pickedDate;
+        selectedDate = DateTime(pickedDate.year, pickedDate.month,
+            pickedDate.day, selectedDate.hour, selectedDate.minute);
       });
     }
   }
@@ -53,9 +57,12 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
       initialTime: TimeOfDay.now(),
     );
 
-    if (pickedTime != null && pickedTime != selectedTime) {
+    if (pickedTime != null &&
+        (pickedTime.hour != selectedDate.hour ||
+            pickedTime.minute != selectedDate.minute)) {
       setState(() {
-        selectedTime = pickedTime;
+        selectedDate = DateTime(selectedDate.year, selectedDate.month,
+            selectedDate.day, pickedTime.hour, pickedTime.minute);
       });
     }
   }
@@ -101,7 +108,8 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                         margin: const EdgeInsets.only(top: 10),
                         child: Material(
                           elevation: 5.0,
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10.0)),
                           color: Colors.deepOrange,
                           child: TextField(
                             onChanged: (value) {
@@ -208,7 +216,7 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                                   child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Text(
-                                        '${formatNumber(selectedTime.hour)} : ${formatNumber(selectedTime.minute)}',
+                                        '${formatNumber(selectedDate.hour)} : ${formatNumber(selectedDate.minute)}',
                                         style: const TextStyle(
                                             fontSize: 20.0,
                                             color: Colors.black),
@@ -273,7 +281,10 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(10),
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          _workService.add(title, summary,
+                              selectedDate.toString(), selectedOption);
+                        },
                         style: TextButton.styleFrom(
                             backgroundColor: Colors.orangeAccent),
                         child: const Text(
