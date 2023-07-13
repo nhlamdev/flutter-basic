@@ -24,6 +24,18 @@ class _WorksScreenState extends State<WorksScreen> {
 
     return SafeArea(
         child: Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const WorkCreateScreen()),
+            );
+          },
+        ),
+      ),
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_circle_left),
@@ -52,16 +64,6 @@ class _WorksScreenState extends State<WorksScreen> {
             },
             offset: const Offset(0, 50), // Adjust the offset as needed
           ),
-          IconButton(
-            icon: const Icon(Icons.add_to_photos),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const WorkCreateScreen()),
-              );
-            },
-          )
         ],
       ),
       body: tabs[_currentIndex],
