@@ -3,7 +3,7 @@ import 'package:test/models/work.model.dart';
 import 'package:test/widgets/works-view/work.item.dart';
 
 class WorksList extends StatelessWidget {
-  final List<Works> data;
+  final List<Work> data;
 
   const WorksList(this.data, {super.key});
 

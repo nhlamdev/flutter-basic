@@ -3,7 +3,7 @@ import 'package:test/models/work.model.dart';
 import 'package:test/utils/func.dart';
 
 class WorkItemWidget extends StatelessWidget {
-  final Works item;
+  final Work item;
 
   const WorkItemWidget(this.item, {super.key});
 
@@ -52,20 +52,36 @@ class WorkItemWidget extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            Text(
-              item.title,
-              textAlign: TextAlign.left,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-                '${formatNumber(item.completeTime.hour)}:${formatNumber(item.completeTime.minute)}:${formatNumber(item.completeTime.second)} ${formatNumber(item.completeTime.day)}/${formatNumber(item.completeTime.month)}/${formatNumber(item.completeTime.year)}')
+            Expanded(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.title,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                    '${formatNumber(item.completeTime.hour)}:${formatNumber(item.completeTime.minute)}:${formatNumber(item.completeTime.second)} ${formatNumber(item.completeTime.day)}/${formatNumber(item.completeTime.month)}/${formatNumber(item.completeTime.year)}')
+              ],
+            )),
+            Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.6),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    )))
           ],
         ));
   }

@@ -7,13 +7,13 @@ class WorkService {
   CustomDatabase customDatabase = CustomDatabase();
   final Uuid _uuid = const Uuid();
 
-  Future<List<Works>> get() async {
-    List<Works> result = [];
+  Future<List<Work>> get() async {
+    List<Work> result = [];
 
     List<Map<String, dynamic>> query = await customDatabase.query('works');
 
     for (var element in query) {
-      Works work = Works(element);
+      Work work = Work(element);
 
       result.add(work);
     }
@@ -21,8 +21,8 @@ class WorkService {
     return result;
   }
 
-  add(String title, String summary, String completeTime,
-      String importance) async {
+  add(String title, String summary, String completeTime, String importance,
+      isComplete) async {
     final uuid = _uuid.v4();
 
     final payload = {
@@ -30,9 +30,14 @@ class WorkService {
       'title': title,
       'summary': summary,
       'completeTime': completeTime,
-      'importance': importance
+      'importance': importance,
+      'complete': isComplete
     };
 
     await customDatabase.insert('works', payload);
+  }
+
+  delete(String id) async {
+    await customDatabase.delete('works', id);
   }
 }

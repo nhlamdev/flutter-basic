@@ -1,4 +1,4 @@
-class Works {
+class Work {
   late String id;
   late String title;
   late String summary;
@@ -6,7 +6,7 @@ class Works {
   late bool complete;
   late String importance;
 
-  Works(Map<String, dynamic> element) {
+  Work(Map<String, dynamic> element) {
     id = element['id'];
     title = element['title'];
     summary = element['summary'];

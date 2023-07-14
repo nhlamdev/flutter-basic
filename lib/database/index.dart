@@ -47,4 +47,9 @@ class CustomDatabase {
     final db = await database;
     return await db.query(tableName);
   }
+
+  delete(String tableName, String id) async {
+    final db = await database;
+    return await db.delete(tableName, where: 'id = ? ', whereArgs: [id]);
+  }
 }

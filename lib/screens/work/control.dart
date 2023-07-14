@@ -4,16 +4,16 @@ import 'package:test/screens/work/index.dart';
 import 'package:test/services/works.dart';
 import 'package:test/utils/func.dart';
 
-class WorkCreateScreen extends StatefulWidget {
-  const WorkCreateScreen({super.key});
+class WorkControlScreen extends StatefulWidget {
+  const WorkControlScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _WorkCreateScreenState();
+    return _WorkControlScreenState();
   }
 }
 
-class _WorkCreateScreenState extends State<WorkCreateScreen> {
+class _WorkControlScreenState extends State<WorkControlScreen> {
   final TextEditingController _textEditingController = TextEditingController();
 
   final WorkService _workService = WorkService();
@@ -22,12 +22,18 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
   String summary = '';
   DateTime selectedDate = DateTime.now();
   String type = 'normal';
+  bool isComplete = false;
 
   Map<String, String> types = {
     'normal': 'Bình thường',
     'prioritize': 'Ưu tiên',
     'important': 'quang trọng',
   };
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -276,6 +282,25 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                             );
                           }).toList(),
                         ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: Row(children: [
+                          Checkbox(
+                            value: isComplete,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                isComplete = value!;
+                              });
+                            },
+                          ),
+                          const Text(
+                            'Hoàn thành',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ]),
                       )
                     ]))),
                     Container(
@@ -283,8 +308,8 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                       padding: const EdgeInsets.all(10),
                       child: TextButton(
                         onPressed: () async {
-                          await _workService.add(
-                              title, summary, selectedDate.toString(), type);
+                          await _workService.add(title, summary,
+                              selectedDate.toString(), type, isComplete);
 
                           Navigator.push(
                             context,
