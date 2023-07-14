@@ -21,13 +21,13 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
   String title = '';
   String summary = '';
   DateTime selectedDate = DateTime.now();
-  String selectedOption = 'Bình thường';
+  String type = 'normal';
 
-  List<String> options = [
-    'Bình thường',
-    'Uu tiên',
-    'Quang trọng',
-  ];
+  Map<String, String> types = {
+    'normal': 'Bình thường',
+    'prioritize': 'Ưu tiên',
+    'important': 'quang trọng',
+  };
 
   @override
   void dispose() {
@@ -140,7 +140,8 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                         alignment: Alignment.topLeft,
                         child: Material(
                           elevation: 5.0,
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10.0)),
                           color: Colors.deepOrange,
                           child: TextField(
                             onChanged: (value) {
@@ -178,7 +179,7 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Text(
-                                          '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+                                          '${formatNumber(selectedDate.day)}/${formatNumber(selectedDate.month)}/${formatNumber(selectedDate.year)}',
                                           style: const TextStyle(
                                               fontSize: 20.0,
                                               color: Colors.black)),
@@ -262,16 +263,16 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                               color: Colors.black,
                               fontSize: 16,
                               fontWeight: FontWeight.bold),
-                          value: selectedOption,
+                          value: type,
                           onChanged: (String? newValue) {
                             setState(() {
-                              selectedOption = newValue!;
+                              type = newValue!;
                             });
                           },
-                          items: options.map((String option) {
+                          items: types.entries.map((option) {
                             return DropdownMenuItem<String>(
-                              value: option,
-                              child: Text(option),
+                              value: option.key,
+                              child: Text(option.value),
                             );
                           }).toList(),
                         ),
@@ -282,8 +283,14 @@ class _WorkCreateScreenState extends State<WorkCreateScreen> {
                       padding: const EdgeInsets.all(10),
                       child: TextButton(
                         onPressed: () async {
-                          _workService.add(title, summary,
-                              selectedDate.toString(), selectedOption);
+                          await _workService.add(
+                              title, summary, selectedDate.toString(), type);
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const WorksScreen()),
+                          );
                         },
                         style: TextButton.styleFrom(
                             backgroundColor: Colors.orangeAccent),

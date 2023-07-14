@@ -21,7 +21,7 @@ class WorkService {
     return result;
   }
 
-  add(String title, String summary, String dateCompelete,
+  add(String title, String summary, String completeTime,
       String importance) async {
     final uuid = _uuid.v4();
 
@@ -29,7 +29,7 @@ class WorkService {
       'id': uuid,
       'title': title,
       'summary': summary,
-      'dateCompelete': dateCompelete,
+      'completeTime': completeTime,
       'importance': importance
     };
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -20,7 +21,10 @@ class CustomDatabase {
 
   Future<Database> initDatabase() async {
     final databasesPath = await getDatabasesPath();
-    final path = join(databasesPath, 'database.db');
+    // if (kDebugMode) {
+    //   print('databasesPath : $databasesPath');
+    // }
+    final path = join(databasesPath, 'database1.db');
 
     return await openDatabase(
       path,
@@ -28,7 +32,7 @@ class CustomDatabase {
       onCreate: (Database db, int version) async {
         // Create your tables here
         await db.execute(
-          'CREATE TABLE works (id TEXT PRIMARY KEY, title TEXT, summary TEXT, dateCompelete TEXT,  importance TEXT)',
+          'CREATE TABLE works (id TEXT PRIMARY KEY, title TEXT, summary TEXT, completeTime TEXT,  importance TEXT, complete BOOLEAN DEFAULT 0 )',
         );
       },
     );

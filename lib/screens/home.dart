@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               ListTile(
-                leading: const Icon(Icons.payments),
+                leading: const Icon(Icons.work),
                 title: const Text('My works'),
                 onTap: () {
                   Navigator.push(
@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.work),
+                leading: const Icon(Icons.payments),
                 title: const Text('My finance'),
                 onTap: () {
                   // Handle drawer item tap

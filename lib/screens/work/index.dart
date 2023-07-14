@@ -1,8 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:test/models/work.model.dart';
 import 'package:test/screens/home.dart';
 import 'package:test/screens/work/create.dart';
 import 'package:test/services/works.dart';
+import 'package:test/widgets/works-view/index.dart';
+import 'package:test/widgets/works-view/work.item.dart';
 
 class WorksScreen extends StatefulWidget {
   const WorksScreen({super.key});
@@ -15,26 +17,28 @@ class WorksScreen extends StatefulWidget {
 
 class _WorksScreenState extends State<WorksScreen> {
   int _currentIndex = 0;
+  List<Works> works = [];
 
   final WorkService _workService = WorkService();
 
-  load() async {
+  _load() async {
     var result = await _workService.get();
-
-    print(result[0].id);
+    setState(() {
+      works = result;
+    });
   }
 
   @override
   void initState() {
     super.initState();
 
-    load();
+    _load();
   }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> tabs = [
-      const Center(child: Text('cong viec hang ngay')),
+      WorksList(works),
       const Center(child: Text('thống kê')),
       const Center(child: Text('thống kê')),
     ];
@@ -97,12 +101,12 @@ class _WorksScreenState extends State<WorksScreen> {
             label: 'important',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.text_snippet),
-            label: 'normal',
+            icon: Icon(Icons.report),
+            label: 'important',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.view_agenda),
-            label: 'periodic',
+            icon: Icon(Icons.history),
+            label: 'history',
           ),
         ],
       ),
